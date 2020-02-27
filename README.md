@@ -22,6 +22,22 @@ Via this project, we shall demonstrate whether there exists a correlation betwee
 
 ---
 
+## Week of 24 Feb
+
+#### On a scale of 1-10, how do we rate our progress over the past week?
+10
+
+#### What did we accomplish from last week's tasks?
+We have begun to read through the original code for [Bagdasaryan, Shmatikov 2019](http://www.cs.cornell.edu/~shmat/shmat_neurips19.pdf).
+
+#### What problems or concerns do we have?
+The Diversity in Faces dataset does not appear to be available. We may need to change our dataset to MNIST (which trains faster anyway).
+
+#### What do we plan to accomplish do over the next week?
+We will attempt to replicate the results for MNIST in [Bagdasaryan, Shmatikov 2019](http://www.cs.cornell.edu/~shmat/shmat_neurips19.pdf).
+
+---
+
 ## Week of X
 
 #### On a scale of 1-10, how do we rate our progress over the past week?
