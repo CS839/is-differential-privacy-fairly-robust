@@ -249,7 +249,7 @@ if __name__ == '__main__':
     writer.add_custom_scalars(layout)
 
     with open(args.params) as f:
-        params = yaml.load(f)
+        params = yaml.load(f, Loader=yaml.FullLoader)
     if params.get('model', False) == 'word':
         helper = TextHelper(current_time=d, params=params, name='text')
 
