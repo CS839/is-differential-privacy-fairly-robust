@@ -22,6 +22,22 @@ Via this project, we shall demonstrate whether there exists a correlation betwee
 
 ---
 
+## Week of 2 Mar
+
+#### On a scale of 1-10, how do we rate our progress over the past week?
+10
+
+#### What did we accomplish from last week's tasks?
+We were able to run the original paper's code for MNIST, and have annotated the code with [comments](https://github.com/CS839/is-differential-privacy-fairly-robust/commit/87e7614e13c53d0fc96f6c0fb8ce7ea4003b6068).
+
+#### What problems or concerns do we have?
+The code as written is undesirably complex. We need to troubleshoot why the code reports the accuracy of the label with the truncated frequency as zero, which doesn't seem right.
+
+#### What do we plan to accomplish do over the next week?
+We will begin to refactor out the code so that the model can be extracted and verified.
+
+---
+
 ## Week of 24 Feb
 
 #### On a scale of 1-10, how do we rate our progress over the past week?
