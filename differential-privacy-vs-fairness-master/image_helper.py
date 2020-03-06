@@ -44,14 +44,17 @@ class ImageHelper(Helper):
             _, label = x
             sum += 1
             per_class_list[int(label)].append(ind)
+        # per_class_list is now a map from labels to lists of indices of training data with that label
         per_class_list = OrderedDict(sorted(per_class_list.items(), key=lambda t: t[0]))
         unbalanced_sum = 0
         for key, indices in per_class_list.items():
             if key and key != key_to_drop:
                 unbalanced_sum += len(indices)
             elif key and key == key_to_drop:
+                # Truncate key_to_drop to number_of_entries
                 unbalanced_sum += number_of_entries
             else:
+                # For MNIST, only key = 0 will fall in this case, which is equivalent to not truncating
                 unbalanced_sum += int(len(indices) * (mu ** key))
 
         if key_to_drop:

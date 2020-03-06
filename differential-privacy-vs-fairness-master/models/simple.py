@@ -81,6 +81,7 @@ class SimpleNet(nn.Module):
 
 
 class Net(SimpleNet):
+    # MNIST NN structure
     def __init__(self):
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(1, 20, 5, 1)

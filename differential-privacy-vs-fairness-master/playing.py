@@ -124,6 +124,7 @@ def train_dp(trainloader, model, optimizer, epoch):
         if helper.params['dataset'] == 'dif':
             inputs, idxs, labels = data
         else:
+            # MNIST case
             inputs, labels = data
         
         inputs = inputs.to(device)
@@ -134,6 +135,7 @@ def train_dp(trainloader, model, optimizer, epoch):
         loss = criterion(outputs, labels)
         running_loss += torch.mean(loss).item()
 
+        # TODO verify dimensions of this losses tensor
         losses = torch.mean(loss.reshape(num_microbatches, -1), dim=1)
         
         saved_var = dict()
@@ -141,9 +143,11 @@ def train_dp(trainloader, model, optimizer, epoch):
             saved_var[tensor_name] = torch.zeros_like(tensor)
         grad_vecs = dict()
         count_vecs = defaultdict(int)
+        # TODO How often does this iterate?
         for pos, j in enumerate(losses):
             j.backward(retain_graph=True)
 
+            # Doesn't apply to params_mnist.yaml
             if helper.params.get('count_norm_cosine_per_batch', False):
 
                 grad_vec = helper.get_grad_vec(model, device)
@@ -154,12 +158,15 @@ def train_dp(trainloader, model, optimizer, epoch):
                 else:
                     grad_vecs[label] = grad_vec
 
+            # Clips gradient norm to S
             total_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), S)
             if helper.params['dataset'] == 'dif':
                 label_norms[f'{labels[pos]}_{helper.label_skin_list[idxs[pos]]}'].append(total_norm)
             else:
+                # MNIST case. label_norms appears to only be for reporting Fig 4 in the paper.
                 label_norms[int(labels[pos])].append(total_norm)
 
+            # Makes a copy of every tensor in the model into saved_var, then zeroes out the model gradients
             for tensor_name, tensor in model.named_parameters():
                   if tensor.grad is not None:
                      new_grad = tensor.grad
@@ -172,9 +179,12 @@ def train_dp(trainloader, model, optimizer, epoch):
                 if device.type == 'cuda':
                     saved_var[tensor_name].add_(torch.cuda.FloatTensor(tensor.grad.shape).normal_(0, sigma))
                 else:
+                    # Adds noise to the copied tensors
                     saved_var[tensor_name].add_(torch.FloatTensor(tensor.grad.shape).normal_(0, sigma))
+                # Restores the tensor gradient
                 tensor.grad = saved_var[tensor_name] / num_microbatches
 
+        # Doesn't apply to params_mnist.yaml
         if helper.params.get('count_norm_cosine_per_batch', False):
             total_grad_vec = helper.get_grad_vec(model, device)
             # logger.info(f'Total grad_vec: {torch.norm(total_grad_vec)}')
@@ -240,7 +250,7 @@ def train(trainloader, model, optimizer, epoch):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PPDL')
-    parser.add_argument('--params', dest='params', default='utils/params.yaml')
+    parser.add_argument('--params', dest='params', default='utils/params_mnist.yaml')
     parser.add_argument('--name', dest='name', required=True)
 
     args = parser.parse_args()
@@ -287,12 +297,14 @@ if __name__ == '__main__':
         helper.load_dif_data()
         helper.get_unbalanced_faces()
     else:
-        helper.load_cifar_data(dataset=params['dataset'])
+        # For MNIST, the important stuff starts here.
+        helper.load_cifar_data(dataset=params['dataset']) # This function isn't restricted to cifar
         logger.info('before loader')
         helper.create_loaders()
         logger.info('after loader')
         helper.sampler_per_class()
         logger.info('after sampler')
+        # Truncates the data for the given key_to_drop to number_of_entries
         helper.sampler_exponential_class(mu=mu, total_number=params['ds_size'], key_to_drop=params['key_to_drop'],
                                         number_of_entries=params['number_of_entries'])
         logger.info('after sampler expo')
@@ -311,6 +323,7 @@ if __name__ == '__main__':
     elif helper.params['dataset'] == 'dif':
         num_classes = len(helper.labels)
     else:
+        # 10 for MNIST
         num_classes = 10
 
     reseed(5)
@@ -342,6 +355,7 @@ if __name__ == '__main__':
                  nlayers=helper.params['nlayers'],
                  dropout=helper.params['dropout'], tie_weights=helper.params['tied'])
     else:
+        # Net for MNIST
         net = Net()
 
     if helper.params.get('multi_gpu', False):
@@ -370,6 +384,7 @@ if __name__ == '__main__':
         criterion = nn.CrossEntropyLoss()
 
     if helper.params['optimizer'] == 'SGD':
+        # params_mnist.yaml uses SGD
         optimizer = optim.SGD(net.parameters(), lr=lr, momentum=momentum, weight_decay=decay)
     elif helper.params['optimizer'] == 'Adam':
         optimizer = optim.Adam(net.parameters(), lr=lr, weight_decay=decay)
@@ -389,13 +404,16 @@ if __name__ == '__main__':
     # acc = test(net, epoch, "accuracy", helper.test_loader, vis=True)
     for epoch in range(helper.start_epoch, epochs):  # loop over the dataset multiple times
         if dp:
+            # Trains the NN with DP
             train_dp(helper.train_loader, net, optimizer, epoch)
         else:
             train(helper.train_loader, net, optimizer, epoch)
         if helper.params['scheduler']:
             scheduler.step()
+        # We will replace this line with robustness test
         main_acc = test(net, epoch, "accuracy", helper.test_loader, vis=True)
         unb_acc_dict = dict()
+        # Doesn't apply to params_mnist.yaml
         if helper.params['dataset'] == 'dif':
             for name, value in sorted(helper.unbalanced_loaders.items(), key=lambda x: x[0]):
                 unb_acc = test(net, epoch, name, value, vis=False)
