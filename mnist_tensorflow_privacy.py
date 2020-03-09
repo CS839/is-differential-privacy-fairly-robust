@@ -124,6 +124,46 @@ learning_rate = 0.25
 if batch_size % num_microbatches != 0:
   raise ValueError('Batch size should be an integer multiple of the number of microbatches')
 
+truncate_proportions = [1, 1, 1, 1, 1, 1, 1, 1, 0.2, 1]
+
+indices = [[] for i in range(len(truncate_proportions))]
+
+label_counts = []
+
+for label, proportion in enumerate(truncate_proportions):
+  # Locate indices where train_label == label
+  indices[label] = np.argwhere(train_labels[:, label])
+  # Shuffle those indices
+  indices[label] = indices[label][np.random.permutation(len(indices[label]))]
+  # Truncate those indices by proportion
+  indices[label] = indices[label][0:int(len(indices[label]) * truncate_proportions[label])].squeeze()
+  label_counts.append(len(indices[label]))
+
+indices = np.concatenate(indices)
+
+# Truncate to integer multiple of batch size (due to https://github.com/tensorflow/privacy/issues/40)
+indices = indices[:(len(indices) // batch_size * batch_size)]
+
+# Shuffle
+indices = indices[np.random.permutation(len(indices))]
+
+# Filter the train_data and train_labels by those indices
+print(train_data.shape)
+truncated_train_data = train_data[indices]
+print(truncated_train_data.shape)
+truncated_train_labels = train_labels[indices]
+
+print(label_counts)
+
+# Split test_data into a list of test data with the same label
+
+test_data_label = []
+
+for label in range(len(truncate_proportions)):
+  indices = np.argwhere(test_labels[:, label]).squeeze()
+  test_data_label.append(test_data[indices, :])
+
+
 """## Build the learning model
 
 Define a convolutional neural network as the learning model.
@@ -161,10 +201,14 @@ loss = tf.keras.losses.CategoricalCrossentropy(
 
 model.compile(optimizer=optimizer, loss=loss, metrics=['accuracy'])
 
-model.fit(train_data, train_labels,
+model.fit(truncated_train_data, truncated_train_labels,
           epochs=epochs,
           validation_data=(test_data, test_labels),
           batch_size=batch_size)
+
+for label, data in enumerate(test_data_label):
+  results = model.evaluate(data, np.broadcast_to(tf.keras.utils.to_categorical(label, num_classes=10), (len(data), 10)), batch_size=1, verbose=0)
+  print('Accuracy for label ' + str(label) + ': ' + str(results[1]))
 
 """## Measure the differential privacy guarantee
 
