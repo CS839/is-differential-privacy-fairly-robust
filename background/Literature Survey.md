@@ -9,3 +9,4 @@
     1. [Almost differential privacy](https://desfontain.es/privacy/almost-differential-privacy.html)
     1. [Local vs. global differential privacy](https://desfontain.es/privacy/local-global-differential-privacy.html)
 1. [Code for training the model](https://github.com/ebagdasa/differential-privacy-vs-fairness)
+1. [MNIST trained in TensorFlow Privacy](https://github.com/tensorflow/privacy/blob/master/tutorials/Classification_Privacy.ipynb)
