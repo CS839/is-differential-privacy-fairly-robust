@@ -22,6 +22,22 @@ Via this project, we shall demonstrate whether there exists a correlation betwee
 
 ---
 
+## Week of 9 Mar
+
+#### On a scale of 1-10, how do we rate our progress over the past week?
+8
+
+#### What did we accomplish from last week's tasks?
+We adapted [an MNIST model](https://github.com/tensorflow/privacy/blob/master/tutorials/Classification_Privacy.ipynb) from TensorFlow Privacy and replicated the result from the original paper using Google Colab.
+
+#### What problems or concerns do we have?
+We ran into [this TensorFlow Privacy issue](https://github.com/tensorflow/privacy/issues/40). It isn't very impactful since it only limits the number of training and test examples to be an integer multiple of the batch size.
+
+#### What do we plan to accomplish do over the next week?
+We will begin studying the use of DiffAI.
+
+---
+
 ## Week of 2 Mar
 
 #### On a scale of 1-10, how do we rate our progress over the past week?
