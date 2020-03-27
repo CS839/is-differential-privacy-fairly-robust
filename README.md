@@ -22,6 +22,22 @@ Via this project, we shall demonstrate whether there exists a correlation betwee
 
 ---
 
+## Week of 22 Mar
+
+#### On a scale of 1-10, how do we rate our progress over the past week?
+6
+
+#### What did we accomplish from last week's tasks?
+We studied [DiffAI](https://github.com/eth-sri/diffai). Its primary purpose appears to be to train robust neural networks, not to verify them.
+
+#### What problems or concerns do we have?
+DiffAI is a PyTorch-based library. We may have to figure out how to transmute our TensorFlow model into PyTorch.
+
+#### What do we plan to accomplish do over the next week?
+Our model is relatively simple (only a few convolutional and fully-connected layers). We will tackle Assignment 2 to get a sense of whether it might be easier to "manually" retrieve the model weights to undertake abstraction verification, as opposed to using DiffAI.
+
+---
+
 ## Week of 9 Mar
 
 #### On a scale of 1-10, how do we rate our progress over the past week?
