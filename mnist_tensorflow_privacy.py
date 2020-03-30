@@ -206,6 +206,8 @@ model.fit(truncated_train_data, truncated_train_labels,
           validation_data=(test_data, test_labels),
           batch_size=batch_size)
 
+model.save('mnist.tf')
+
 for label, data in enumerate(test_data_label):
   results = model.evaluate(data, np.broadcast_to(tf.keras.utils.to_categorical(label, num_classes=10), (len(data), 10)), batch_size=1, verbose=0)
   print('Accuracy for label ' + str(label) + ': ' + str(results[1]))
