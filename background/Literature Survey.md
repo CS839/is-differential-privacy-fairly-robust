@@ -11,7 +11,7 @@
 1. [Code for training the model](https://github.com/ebagdasa/differential-privacy-vs-fairness)
 1. [MNIST trained in TensorFlow Privacy](https://github.com/tensorflow/privacy/blob/master/tutorials/Classification_Privacy.ipynb)
 1. [ERAN for abstraction verification](https://github.com/eth-sri/eran)
-    1. [Colab file] (https://colab.research.google.com/drive/1qUSYw433SnmaI_DZ4ovTBDZzrRhW5otn)
+    1. [Colab file](https://colab.research.google.com/drive/1qUSYw433SnmaI_DZ4ovTBDZzrRhW5otn)
     1. Save a TensorFlow model .tf file
     1. Edit the raw MNIST data file [here](https://github.com/eth-sri/eran/blob/master/data/mnist_test.csv) to include all images of a certain label
     1. Run ERAN, specifying perturbation epsilon to verify
