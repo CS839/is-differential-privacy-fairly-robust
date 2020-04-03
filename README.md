@@ -15,14 +15,30 @@ As far as we can tell, the literature on adversarial robustness concentrates mos
 [Bagdasaryan, Shmatikov 2019](http://www.cs.cornell.edu/~shmat/shmat_neurips19.pdf), following literature on fairness, establishes the relationship between subgroup size and prediction output accuracy, parametrised on the differential privacy parameter. It is unknown whether there is a relationship between subgroup size and robustness, for varying differential privacy parameters.
 
 #### What do you propose to do?
-We follow the training methodology in [Bagdasaryan, Shmatikov 2019](http://www.cs.cornell.edu/~shmat/shmat_neurips19.pdf) and will concentrate on the Flickr face dataset, which contains images of human faces with unevenly distributed skin tones. We will train differentially private neural networks with a varying privacy parameter (epsilon), then repeatedly perform abstraction-based verification using DiffAI with varying perturbation quantities on test sets of majority and minority group face images to determine robustness.
+We follow the training methodology in [Bagdasaryan, Shmatikov 2019](http://www.cs.cornell.edu/~shmat/shmat_neurips19.pdf) and will concentrate on the MNIST dataset. We will truncate a particular class within the dataset to varying degrees to create a minority class, train differentially private neural networks with varying differential privacy parameters (noise and clipping combined to influence epsilon), then perform abstraction-based verification using [ERAN](https://github.com/eth-sri/eran) on test sets of the majority and minority classes with varying perturbation quantities to determine robustness.
 
 #### What are your measures of success?
 Via this project, we shall demonstrate whether there exists a correlation between robustness and subgroup size, parametrised by the privacy parameter (epsilon). We are hoping to come up with a figure resembling Figure 2(b) in [Bagdasaryan, Shmatikov 2019](http://www.cs.cornell.edu/~shmat/shmat_neurips19.pdf), with robustness on the ordinate axis. This will help us understand what tradeoff there might be between differential privacy and fair robustness.
 
 ---
 
-## Week of 22 Mar
+## Week of 30 Mar
+
+#### On a scale of 1-10, how do we rate our progress over the past week?
+7
+
+#### What did we accomplish from last week's tasks?
+We switched to using a different abstraction verification library, [ERAN](https://github.com/eth-sri/eran), which can directly take TensorFlow models. We are working on compiling the dependencies within Colab.
+
+#### What problems or concerns do we have?
+We need to determine ranges for the differential privacy parameters (noise and clipping), degree of truncation of the minority class, and robustness (perturbation quantity) for our experiment.
+
+#### What do we plan to accomplish do over the next week?
+We will finish setting up ERAN so that it runs correctly within Colab.
+
+---
+
+## Week of 23 Mar
 
 #### On a scale of 1-10, how do we rate our progress over the past week?
 6
