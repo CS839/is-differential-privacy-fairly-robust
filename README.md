@@ -22,6 +22,22 @@ Via this project, we shall demonstrate whether there exists a correlation betwee
 
 ---
 
+## Week of 6 Apr
+
+#### On a scale of 1-10, how do we rate our progress over the past week?
+7
+
+#### What did we accomplish from last week's tasks?
+We got ERAN [compiling and running in Colab](https://github.com/CS839/is-differential-privacy-fairly-robust/commit/1ec777b041aaff4a9e79c0eb34f533dccb11c46e). ERAN's model input format does not appear to be documented at all, so we [reverse-engineered it](https://github.com/CS839/is-differential-privacy-fairly-robust/commit/6147daa693482fa02376edcbc97c9ff093217d13).
+
+#### What problems or concerns do we have?
+None.
+
+#### What do we plan to accomplish do over the next week?
+We will begin training models in Colab for parameter ranges of differential privacy optimisation noise and clipping, minority class truncation, and perturbation quantity.
+
+---
+
 ## Week of 30 Mar
 
 #### On a scale of 1-10, how do we rate our progress over the past week?
